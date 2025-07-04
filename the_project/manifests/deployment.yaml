@@ -16,6 +16,9 @@ spec:
         - name: todo-server
           imagePullPolicy: Never # local image
           image: todo-server
+          env:
+            - name: PORT
+              value: "5000"
 
 # make sure to build and load the image before (see readme)
-# apply changes: kubectl apply -f deployment.yaml
+# apply changes: kubectl apply -f manifests/deployment.yaml
