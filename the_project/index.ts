@@ -14,8 +14,8 @@ const server = Bun.serve({
 
 console.log(`Server started in port ${server.port}!`);
 
-// docker build --pull -t project .
-// docker run -d -p 3000:3000 project
+// docker build --pull -t todo-server .
+// docker run -d -p 3000:3000 todo-server
 
 // forwarding port in kube
 // kubectl port-forward todo-server-dep-6f574656bd-m9z28 5000:5000
