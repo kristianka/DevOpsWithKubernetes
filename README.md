@@ -3,6 +3,7 @@
 
 Submissions for the University of Helsinki's Devops with Kubernetes course.
 
+Note: Folders also have readmes
 
 ## Exercises
 
