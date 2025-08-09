@@ -1,7 +1,7 @@
 ## Commands to run
 
 - `docker build . -t log-output`
-- `k3d cluster create -a 2`
+- `k3d cluster create --port 8082:30080@agent:0 -p 8081:80@loadbalancer --agents 2`
 - `k3d image import log-output`
 - `kubectl create deployment log-output --image=log-output`
 
@@ -19,3 +19,10 @@
 - `docker build --pull -t log-output . && k3d image import log-output`
 - `kubectl apply -f manifests`
 - View the app in http://localhost:8081/
+
+
+### Exercise 1.10
+
+- If k3d breaks, just delete all the Docker containers and fully restart Docker
+- Make sure you change new pod's `imagePullPolicy` (check `kubectl get pods`)
+- Same steps as above
