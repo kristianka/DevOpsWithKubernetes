@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "Preserve",
     "moduleDetection": "force",
@@ -8,5 +8,8 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
-  }
+    "jsx": "react-jsx"
+  },
+  "include": ["src", "index.ts", "index.html", "client"],
+  "exclude": ["node_modules"]
 }

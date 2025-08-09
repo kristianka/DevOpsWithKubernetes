@@ -1,4 +1,3 @@
-import mySite from "./index.html";
 import {
   CACHE_DURATION_MS,
   downloadImage,
@@ -16,10 +15,51 @@ let inFlightDownload: Promise<void> | null = null;
 // Prepare dir on startup
 ensureImageDir();
 
+// frontend ENV injection setup
+const CLIENT_API = Bun.env.CLIENT_API || "http://localhost:8081"; // fallback for local dev
+let clientBundleCache: { code: string; api: string } | null = null;
+
 const server = Bun.serve({
   port: Bun.env.PORT ? parseInt(Bun.env.PORT) : 3000,
   routes: {
-    "/": mySite,
+    "/": () =>
+      new Response(Bun.file("index.html"), {
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      }),
+    // bundle & serve React client (injecting CLIENT_API as process.env.CLIENT_API)
+    "/client.js": async () => {
+      try {
+        if (clientBundleCache && clientBundleCache.api === CLIENT_API) {
+          return new Response(clientBundleCache.code, {
+            headers: { "Content-Type": "application/javascript" },
+          });
+        }
+
+        // inject env vars. looks so hacky but according to docs this is as intended...
+        const result = await Bun.build({
+          entrypoints: ["./client/main.tsx"],
+          target: "browser",
+          sourcemap: Bun.env.NODE_ENV === "production" ? "none" : "inline",
+          define: {
+            "process.env.CLIENT_API": JSON.stringify(CLIENT_API),
+          },
+        });
+
+        if (!result.outputs.length) {
+          return new Response("Build failed", { status: 500 });
+        }
+
+        const code = await result.outputs[0].text();
+        clientBundleCache = { code, api: CLIENT_API };
+
+        return new Response(code, {
+          headers: { "Content-Type": "application/javascript" },
+        });
+      } catch (e) {
+        console.error("Failed building client", e);
+        return new Response("Error building client", { status: 500 });
+      }
+    },
     "/hello": () => new Response("Hello, Bun!"),
     "/json": () =>
       new Response(JSON.stringify({ message: "Hello, JSON!" }), {

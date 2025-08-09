@@ -6,23 +6,7 @@
     <title>DevOps with Kubernetes 2025</title>
   </head>
   <body>
-    <div>
-      <h1>The project App</h1>
-
-      <p>DevOps with Kubernetes 2025</p>
-      <img
-        id="hourlyImg"
-        src="http://localhost:8081/hourly-image"
-        alt="Hourly Random Image"
-        style="max-width: 50%; height: auto"
-      />
-      <div style="margin-top: 1rem">
-        <button onclick="refreshImage()">Force Refresh</button>
-        <span
-          id="status"
-          style="margin-left: 1rem; font-size: 0.9em; color: #555"
-        ></span>
-      </div>
-    </div>
+    <div id="root"></div>
+    <script type="module" src="/client.js"></script>
   </body>
 </html>
