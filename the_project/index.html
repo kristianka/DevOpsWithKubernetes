@@ -1,13 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DevOps with Kubernetes 2025</title>
+  </head>
+  <body>
     <div>
-        <p>Hello world! 😁</p>
+      <h1>The project App</h1>
+
+      <p>DevOps with Kubernetes 2025</p>
+      <img
+        id="hourlyImg"
+        src="http://localhost:8081/hourly-image"
+        alt="Hourly Random Image"
+        style="max-width: 50%; height: auto"
+      />
+      <div style="margin-top: 1rem">
+        <button onclick="refreshImage()">Force Refresh</button>
+        <span
+          id="status"
+          style="margin-left: 1rem; font-size: 0.9em; color: #555"
+        ></span>
+      </div>
     </div>
-</body>
+  </body>
 </html>

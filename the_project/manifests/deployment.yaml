@@ -12,6 +12,29 @@ spec:
       labels:
         app: todo-server
     spec:
+
+    # add permission to read the files
+      securityContext:
+        runAsUser: 1000        # bun user UID (common in oven/bun image)
+        runAsGroup: 1000       # bun group GID
+        fsGroup: 1000          # ensure mounted volume gets group ownership
+        fsGroupChangePolicy: OnRootMismatch
+      initContainers:
+        - name: fix-public-permissions
+          image: busybox:1.36
+          command: ["sh","-c","chown -R 1000:1000 /usr/src/app/public 2>/dev/null || true; chmod -R g+rwX /usr/src/app/public || true"]
+          securityContext:
+            runAsUser: 0       # run as root just for permission change
+          volumeMounts:
+            - name: project-storage  # must match volume name below
+              mountPath: /usr/src/app/public
+
+
+      volumes:
+      - name: project-storage
+        persistentVolumeClaim:
+          claimName: project-claim
+
       containers:
         - name: todo-server
           imagePullPolicy: Never # local image
@@ -19,6 +42,9 @@ spec:
           env:
             - name: PORT
               value: "5000"
+          volumeMounts:
+            - name: project-storage
+              mountPath: /usr/src/app/public
 
 # make sure to build and load the image before (see readme)
 # apply changes: kubectl apply -f manifests/deployment.yaml
