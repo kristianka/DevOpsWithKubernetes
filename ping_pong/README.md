@@ -7,3 +7,8 @@
 - `cd .. cd .\log_output\`
 - `kubectl apply -f manifests/`
 - http://localhost:8082/pingpong
+
+
+### Exercuse 1.11
+
+- See `log_output` folder

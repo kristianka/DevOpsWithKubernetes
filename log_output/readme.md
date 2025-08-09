@@ -26,3 +26,12 @@
 - If k3d breaks, just delete all the Docker containers and fully restart Docker
 - Make sure you change new pod's `imagePullPolicy` (check `kubectl get pods`)
 - Same steps as above
+
+
+### Exercise 1.11
+
+- `docker exec k3d-k3s-default-agent-0 mkdir -p /tmp/kube`
+- Pretty much as same steps above, just for `ping_pong` app too
+- (Started taking screenshots from this point on)
+
+![alt text](image.png)
