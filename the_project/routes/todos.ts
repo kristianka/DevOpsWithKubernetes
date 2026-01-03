@@ -43,7 +43,7 @@ export const addTodo = async (req: Request) => {
 
     todos.push(newTodo);
 
-    return jsonResponse({ success: true, todos }, 201);
+    return jsonResponse({ success: true, newTodo }, 201);
   } catch (error) {
     return jsonResponse({ error: "Invalid JSON" }, 400);
   }

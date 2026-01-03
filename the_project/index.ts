@@ -17,7 +17,7 @@ let inFlightDownload: Promise<void> | null = null;
 ensureImageDir();
 
 // frontend ENV injection setup
-const CLIENT_API = Bun.env.CLIENT_API || "http://localhost:8081"; // fallback for local dev
+const CLIENT_API = Bun.env.CLIENT_API || "http://localhost:3000"; // fallback for local dev
 let clientBundleCache: { code: string; api: string } | null = null;
 
 const server = Bun.serve({
