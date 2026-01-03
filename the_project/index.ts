@@ -7,8 +7,9 @@ import {
   saveTimestamp,
   ensureImageDir,
   listPublicFiles,
-  IMAGE_DIR,
+  IMAGE_DIR
 } from "./misc";
+import { getTodos, addTodo } from "./routes/todos";
 
 let inFlightDownload: Promise<void> | null = null;
 
@@ -24,14 +25,14 @@ const server = Bun.serve({
   routes: {
     "/": () =>
       new Response(Bun.file("index.html"), {
-        headers: { "Content-Type": "text/html; charset=utf-8" },
+        headers: { "Content-Type": "text/html; charset=utf-8" }
       }),
     // bundle & serve React client (injecting CLIENT_API as process.env.CLIENT_API)
     "/client.js": async () => {
       try {
         if (clientBundleCache && clientBundleCache.api === CLIENT_API) {
           return new Response(clientBundleCache.code, {
-            headers: { "Content-Type": "application/javascript" },
+            headers: { "Content-Type": "application/javascript" }
           });
         }
 
@@ -41,8 +42,8 @@ const server = Bun.serve({
           target: "browser",
           sourcemap: Bun.env.NODE_ENV === "production" ? "none" : "inline",
           define: {
-            "process.env.CLIENT_API": JSON.stringify(CLIENT_API),
-          },
+            "process.env.CLIENT_API": JSON.stringify(CLIENT_API)
+          }
         });
 
         if (!result.outputs.length) {
@@ -53,7 +54,7 @@ const server = Bun.serve({
         clientBundleCache = { code, api: CLIENT_API };
 
         return new Response(code, {
-          headers: { "Content-Type": "application/javascript" },
+          headers: { "Content-Type": "application/javascript" }
         });
       } catch (e) {
         console.error("Failed building client", e);
@@ -63,7 +64,7 @@ const server = Bun.serve({
     "/hello": () => new Response("Hello, Bun!"),
     "/json": () =>
       new Response(JSON.stringify({ message: "Hello, JSON!" }), {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       }),
 
     "/hourly-image": async () => {
@@ -72,10 +73,7 @@ const server = Bun.serve({
         const lastUpdated = await getCachedTimestamp();
 
         // check if file needs to be updated
-        if (
-          !(await fileExists(IMAGE_FILE)) ||
-          now - lastUpdated > CACHE_DURATION_MS
-        ) {
+        if (!(await fileExists(IMAGE_FILE)) || now - lastUpdated > CACHE_DURATION_MS) {
           if (!inFlightDownload) {
             inFlightDownload = (async () => {
               try {
@@ -98,7 +96,7 @@ const server = Bun.serve({
         if (!(await fileExists(IMAGE_FILE))) {
           return new Response("Image not yet available, try again shortly", {
             status: 503,
-            headers: { "Retry-After": "5" },
+            headers: { "Retry-After": "5" }
           });
         }
 
@@ -106,24 +104,33 @@ const server = Bun.serve({
         return new Response(imgFile.stream(), {
           headers: {
             "Content-Type": "image/jpeg",
-            "Cache-Control": "public, max-age=600",
-          },
+            "Cache-Control": "public, max-age=600"
+          }
         });
       } catch (err) {
         console.log("Error loading image", err);
         return new Response("Error loading image", { status: 500 });
       }
     },
+
     // reveals all public files. good for debugging
     "/debug/public": async () => {
       const info = await listPublicFiles();
       return new Response(JSON.stringify(info, null, 2), {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }
       });
     },
-  },
+
+    // Todo routes
+    "/todos": (req: Request) => {
+      if (req.method === "GET") {
+        return getTodos(req);
+      } else if (req.method === "POST") {
+        return addTodo(req);
+      }
+      return new Response("Method not allowed", { status: 405 });
+    }
+  }
 });
 
-console.log(
-  `Server started on port ${server.port}! Using IMAGE_DIR=${IMAGE_DIR}`
-);
+console.log(`Server started on port ${server.port}! Using IMAGE_DIR=${IMAGE_DIR}`);
