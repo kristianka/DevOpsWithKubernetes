@@ -11,20 +11,20 @@ export const Todos = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        // fetch todos from server
-        const res = await fetch(`${process.env.CLIENT_API}/todos`);
-        const todos = await res.json();
-        setTodos(todos);
-      } catch (error) {
-        setError("Failed to fetch todos");
-        console.error("Error fetching todos:", error);
-        setTodos([]);
-      }
-    };
+  const fetchTodos = async () => {
+    try {
+      // fetch todos from server
+      const res = await fetch(`${process.env.CLIENT_API}/todos`);
+      const todos = await res.json();
+      setTodos(todos);
+    } catch (error) {
+      setError("Failed to fetch todos");
+      console.error("Error fetching todos:", error);
+      setTodos([]);
+    }
+  };
 
+  useEffect(() => {
     fetchTodos();
     setLoading(false);
   }, []);
@@ -68,6 +68,9 @@ export const Todos = () => {
         >
           {" "}
           Add Todo
+        </button>
+        <button disabled={loading} onClick={fetchTodos}>
+          Refresh
         </button>
       </div>
       {loading && <p>Loading todos...</p>}
