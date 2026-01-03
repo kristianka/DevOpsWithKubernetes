@@ -1,5 +1,9 @@
 ## Commands to run
 
+### All-in-one command to restart
+
+- `docker build --pull -t log-output . && k3d image import log-output && kubectl rollout restart deployment log-output-dep`
+
 - `docker build . -t log-output`
 - `k3d cluster create --port 8082:30080@agent:0 -p 8081:80@loadbalancer --agents 2`
 - `k3d image import log-output`
@@ -11,6 +15,10 @@
 - Change `imagePullPolicy` to `IfNotPresent`
 - Save, then restart pod with `kubectl rollout restart deployment/log-output`
 
+### Troubleshooting
+
+- Is `kubectl` up and running? `k3d cluster start k3s-default`
+- Show cluster info with `kubectl cluster-info`
 
 ## Commands
 
@@ -20,13 +28,11 @@
 - `kubectl apply -f manifests`
 - View the app in http://localhost:8081/
 
-
 ### Exercise 1.10
 
 - If k3d breaks, just delete all the Docker containers and fully restart Docker
-- Make sure you change new pod's `imagePullPolicy` (check `kubectl get pods`)
+- Make sure you change new pod's `imagePullPolicy` (check `kubectl apply -f manifests`)
 - Same steps as above
-
 
 ### Exercise 1.11
 
