@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: log-output-dep
+  namespace: log-ping-namespace
 spec:
   replicas: 1
   selector:
@@ -49,6 +50,8 @@ spec:
           env:
           - name: PING_PONG_URL
             value: "http://ping-pong-svc:80/pongs"
+
+        
 
 # make sure to build and load the image before (see readme)
 # apply changes: kubectl apply -f deployment.yaml
