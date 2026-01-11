@@ -34,3 +34,7 @@ Testing new technologies! Originally tried Deno, but couldn't get env values wor
 - `kubectl apply -f manifests/deployment.yaml`
 - `kubectl apply -f .\manifests\service.yaml`
 - http://localhost:8082/
+
+### Exercise 2.4
+
+- `kubectl create namespace project`
