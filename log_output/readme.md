@@ -2,7 +2,7 @@
 
 ### All-in-one command to restart
 
-- `docker build --pull -t log-output . && k3d image import log-output && kubectl rollout restart deployment log-output-dep -n log-ping-namespace`
+- `docker build --pull -t log-output . && k3d image import log-output && kubectl rollout restart deployment log-output-dep -n exercises`
 
 - `docker build . -t log-output`
 - `k3d cluster create --port 8082:30080@agent:0 -p 8081:80@loadbalancer --agents 2`
@@ -45,4 +45,4 @@
 
 ### Exercise 2.3
 
-- `kubectl create namespace log-ping-namespace`
+- `kubectl create namespace exercises`

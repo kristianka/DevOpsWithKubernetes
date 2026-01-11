@@ -2,7 +2,7 @@
 
 ### All-in-one command to restart
 
-- `docker build --pull -t ping-pong . && k3d image import ping-pong && kubectl rollout restart deployment ping-pong-dep -n log-ping-namespace`
+- `docker build --pull -t ping-pong . && k3d image import ping-pong && kubectl rollout restart deployment ping-pong-dep -n exercises`
 
 ### Exercise 1.9
 
