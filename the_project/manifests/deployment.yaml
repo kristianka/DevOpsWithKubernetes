@@ -43,6 +43,10 @@ spec:
           env:
             - name: PORT
               value: "5000"
+            - name: CLIENT_API
+              value: "http://localhost:8081"
+            - name: IMAGE_URL
+              value: "https://picsum.photos/1200"
           volumeMounts:
             - name: project-storage
               mountPath: /usr/src/app/public

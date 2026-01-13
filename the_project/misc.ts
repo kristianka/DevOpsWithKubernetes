@@ -26,7 +26,8 @@ export const saveTimestamp = async (ts: number) => {
 };
 
 export const downloadImage = async () => {
-  const res = await fetch("https://picsum.photos/1200");
+  const imageUrl = Bun.env.IMAGE_URL || "https://picsum.photos/1200";
+  const res = await fetch(imageUrl);
   if (!res.ok) throw new Error("Failed to fetch image");
 
   const buffer = await res.arrayBuffer();
