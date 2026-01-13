@@ -2,6 +2,8 @@ import { existsSync, readFileSync } from "node:fs";
 
 const LOG_FILE = "/usr/src/app/shared/log.txt";
 const PING_PONG_URL = Bun.env.PING_PONG_URL || "http://ping-pong-svc/pongs";
+const CONFIG_FILE = "/usr/src/app/config/information.txt";
+const MESSAGE = Bun.env.MESSAGE || "No message set";
 const uuid = crypto.randomUUID();
 
 const server = Bun.serve({
@@ -17,7 +19,13 @@ const server = Bun.serve({
         }
         const pongCount = await response.text();
         const timestamp = new Date().toISOString();
-        const output = `${timestamp}: ${uuid}.\nPing / Pongs: ${pongCount}`;
+
+        let fileContent = "File not found";
+        if (existsSync(CONFIG_FILE)) {
+          fileContent = readFileSync(CONFIG_FILE, "utf-8").trim();
+        }
+
+        const output = `file content: ${fileContent}\nenv variable: MESSAGE=${MESSAGE}\n${timestamp}: ${uuid}.\nPing / Pongs: ${pongCount}`;
         return new Response(output, { status: 200 });
       } catch (e) {
         console.error("Error fetching pong count:", e);

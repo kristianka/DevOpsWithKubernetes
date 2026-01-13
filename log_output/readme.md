@@ -42,7 +42,10 @@
 
 ![alt text](image.png)
 
-
 ### Exercise 2.3
 
 - `kubectl create namespace exercises`
+
+### Exercise 2.5
+
+![alt text](2.5.png)
