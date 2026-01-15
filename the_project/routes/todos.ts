@@ -18,6 +18,8 @@ const jsonResponse = (data: any, status: number = 200): Response => {
 
 export const getTodos = async (req: Request) => {
   try {
+    console.log(`[TODO REQUEST] Fetching all todos`);
+
     const res = await pool.query(`
         SELECT
             id,
@@ -30,14 +32,14 @@ export const getTodos = async (req: Request) => {
       `);
 
     if (res.rowCount === 0) {
-      console.log("No todos found");
+      console.log("[TODO RESPONSE] No todos found");
       return jsonResponse({ todos: [] });
     }
 
-    console.log(`Fetched ${res.rowCount} todos`);
+    console.log(`[TODO RESPONSE] Fetched ${res.rowCount} todos`);
     return jsonResponse({ todos: res.rows });
   } catch (error) {
-    console.error("Error fetching todos:", error);
+    console.error("[TODO ERROR] Error fetching todos:", error);
     return jsonResponse({ error: "Failed to fetch todos" }, 500);
   }
 };
@@ -46,9 +48,30 @@ export const addTodo = async (req: Request) => {
   try {
     const body = (await req.json()) as { text: string };
 
+    // Log incoming request
+    console.log(`[TODO REQUEST] Received todo request: "${body.text || "(empty)"}"`);
+
     // basic validity
     if (!body.text || typeof body.text !== "string" || body.text.trim() === "") {
+      console.log(`[TODO REJECTED] Empty or invalid todo text`);
       return jsonResponse({ error: "Todo text is required" }, 400);
+    }
+
+    const trimmedText = body.text.trim();
+
+    // Check character limit (140 characters)
+    if (trimmedText.length > 140) {
+      console.log(
+        `[TODO REJECTED] Todo too long: ${trimmedText.length} characters (limit: 140). Text: "${trimmedText}"`
+      );
+      return jsonResponse(
+        {
+          error: "Todo text must be 140 characters or less",
+          length: trimmedText.length,
+          limit: 140
+        },
+        400
+      );
     }
 
     const res = await pool.query(
@@ -57,14 +80,16 @@ export const addTodo = async (req: Request) => {
       VALUES ($1, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
       RETURNING id, text, completed, created_at, updated_at
     `,
-      [body.text.trim()]
+      [trimmedText]
     );
 
     const newTodo: Todo = res.rows[0];
-    console.log("Added new todo:", newTodo);
+    console.log(
+      `[TODO ACCEPTED] Added new todo (ID: ${newTodo.id}, length: ${trimmedText.length}): "${trimmedText}"`
+    );
     return jsonResponse({ success: true, newTodo }, 201);
   } catch (error) {
-    console.error("Error adding todo:", error);
+    console.error("[TODO ERROR] Error adding todo:", error);
     return jsonResponse({ error: "Invalid JSON" }, 400);
   }
 };
