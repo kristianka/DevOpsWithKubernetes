@@ -1,0 +1,25 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: wikipedia-cron
+  namespace: project
+spec:
+  schedule: "0 * * * *"  # every hour
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: wikipedia-cron
+            image: todo-server
+            imagePullPolicy: Never
+            command:
+            - bun
+            - run
+            - src/cron.ts
+            env:
+            - name: TODO_SERVICE_URL
+              value: "http://todo-server-svc.project.svc.cluster.local:2345"
+            - name: BASE_PATH
+              value: "/project"
+          restartPolicy: OnFailure
