@@ -4,14 +4,12 @@
 
 Testing new technologies! Originally tried Deno, but couldn't get env values working. Bun seems to be pretty popular: 78.9k stars [on GitHub](https://github.com/oven-sh/bun)!
 
-
 ## Setup
 
 ### Bun
 
 - https://bun.sh/
 - Make sure to open this folder specifically with vs code, otherwise tsconfig won't load properly and will show errors
-
 
 ### Kubernetes
 
@@ -20,11 +18,11 @@ Testing new technologies! Originally tried Deno, but couldn't get env values wor
 - `k3d image import todo-server`
 - `kubectl create deployment todo-server --image=todo-server`
 
-
-
-
-
 ## Commands
+
+### All-in-one command to restart
+
+- `docker build --pull -t todo-server . && k3d image import todo-server && kubectl rollout restart deployment todo-server-dep -n project`
 
 ### Exercise 1.6
 

@@ -15,8 +15,11 @@ export const Todos = () => {
     try {
       // fetch todos from server
       const res = await fetch(`${process.env.CLIENT_API}/todos`);
-      const todos = await res.json();
-      setTodos(todos);
+      if (!res.ok) {
+        throw new Error("Failed to fetch todos");
+      }
+      const data = await res.json();
+      setTodos(data.todos);
     } catch (error) {
       setError("Failed to fetch todos");
       console.error("Error fetching todos:", error);
@@ -28,6 +31,8 @@ export const Todos = () => {
     fetchTodos();
     setLoading(false);
   }, []);
+
+  console.log("Todos rendered with:", todos);
 
   const addTodo = async (text: string) => {
     try {
@@ -76,7 +81,7 @@ export const Todos = () => {
       {loading && <p>Loading todos...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
       <div>
-        {todos.map((t, index) => (
+        {todos?.map((t, index) => (
           <li key={t.id}>{t.text}</li>
         ))}
       </div>

@@ -8,13 +8,17 @@ import {
   ensureImageDir,
   listPublicFiles,
   IMAGE_DIR
-} from "./misc";
-import { getTodos, addTodo } from "./routes/todos";
+} from "../misc";
+import { getTodos, addTodo } from "../routes/todos";
+import { initDB } from "./db";
 
 let inFlightDownload: Promise<void> | null = null;
 
 // Prepare dir on startup
 ensureImageDir();
+
+// Initialize database on startup
+await initDB();
 
 // frontend ENV injection setup
 const CLIENT_API = Bun.env.CLIENT_API || "http://localhost:3000"; // fallback for local dev
@@ -23,12 +27,12 @@ let clientBundleCache: { code: string; api: string } | null = null;
 const server = Bun.serve({
   port: Bun.env.PORT ? parseInt(Bun.env.PORT) : 3000,
   routes: {
-    "/": () =>
+    [`/project`]: () =>
       new Response(Bun.file("index.html"), {
         headers: { "Content-Type": "text/html; charset=utf-8" }
       }),
     // bundle & serve React client (injecting CLIENT_API as process.env.CLIENT_API)
-    "/client.js": async () => {
+    [`/project/client.js`]: async () => {
       try {
         if (clientBundleCache && clientBundleCache.api === CLIENT_API) {
           return new Response(clientBundleCache.code, {
@@ -61,13 +65,13 @@ const server = Bun.serve({
         return new Response("Error building client", { status: 500 });
       }
     },
-    "/hello": () => new Response("Hello, Bun!"),
-    "/json": () =>
+    [`/project/hello`]: () => new Response("Hello, Bun!"),
+    [`/project/json`]: () =>
       new Response(JSON.stringify({ message: "Hello, JSON!" }), {
         headers: { "Content-Type": "application/json" }
       }),
 
-    "/hourly-image": async () => {
+    [`/project/hourly-image`]: async () => {
       try {
         const now = Date.now();
         const lastUpdated = await getCachedTimestamp();
@@ -114,7 +118,7 @@ const server = Bun.serve({
     },
 
     // reveals all public files. good for debugging
-    "/debug/public": async () => {
+    [`/project/debug/public`]: async () => {
       const info = await listPublicFiles();
       return new Response(JSON.stringify(info, null, 2), {
         headers: { "Content-Type": "application/json" }
@@ -122,7 +126,7 @@ const server = Bun.serve({
     },
 
     // Todo routes
-    "/todos": (req: Request) => {
+    [`/project/todos`]: (req: Request) => {
       if (req.method === "GET") {
         return getTodos(req);
       } else if (req.method === "POST") {

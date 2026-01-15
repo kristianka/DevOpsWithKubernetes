@@ -43,10 +43,33 @@ spec:
           env:
             - name: PORT
               value: "5000"
+            - name: BASE_PATH
+              value: "/project" # allows to run exercises at the same time
             - name: CLIENT_API
-              value: "http://localhost:8081"
+              value: "http://localhost:8081/project"
             - name: IMAGE_URL
               value: "https://picsum.photos/1200"
+
+            - name: POSTGRES_HOST
+              value: "postgres-stset-0.postgres-svc"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_DB
+
           volumeMounts:
             - name: project-storage
               mountPath: /usr/src/app/public

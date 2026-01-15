@@ -1,16 +1,9 @@
+import { pool } from "../src/db";
+
 interface Todo {
   id: number;
   text: string;
 }
-
-// in-memory todo storage
-let todos: Todo[] = [
-  { id: 1, text: "Learn Kubernetes (from server)" },
-  { id: 2, text: "Release SaaS (from server)" },
-  { id: 3, text: "Walk 10 000 steps everyday (from server)" }
-];
-
-let nextId = 4;
 
 // helper to create responses with common headers
 const jsonResponse = (data: any, status: number = 200): Response => {
@@ -23,8 +16,30 @@ const jsonResponse = (data: any, status: number = 200): Response => {
   });
 };
 
-export const getTodos = (req: Request) => {
-  return jsonResponse(todos);
+export const getTodos = async (req: Request) => {
+  try {
+    const res = await pool.query(`
+        SELECT
+            id,
+            text,
+            completed,
+            created_at,
+            updated_at
+        FROM
+            todo
+      `);
+
+    if (res.rowCount === 0) {
+      console.log("No todos found");
+      return jsonResponse({ todos: [] });
+    }
+
+    console.log(`Fetched ${res.rowCount} todos`);
+    return jsonResponse({ todos: res.rows });
+  } catch (error) {
+    console.error("Error fetching todos:", error);
+    return jsonResponse({ error: "Failed to fetch todos" }, 500);
+  }
 };
 
 export const addTodo = async (req: Request) => {
@@ -36,15 +51,20 @@ export const addTodo = async (req: Request) => {
       return jsonResponse({ error: "Todo text is required" }, 400);
     }
 
-    const newTodo: Todo = {
-      id: nextId++, // in perfect world uuid
-      text: body.text.trim()
-    };
+    const res = await pool.query(
+      `
+      INSERT INTO todo (text, completed, created_at, updated_at)
+      VALUES ($1, false, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      RETURNING id, text, completed, created_at, updated_at
+    `,
+      [body.text.trim()]
+    );
 
-    todos.push(newTodo);
-
+    const newTodo: Todo = res.rows[0];
+    console.log("Added new todo:", newTodo);
     return jsonResponse({ success: true, newTodo }, 201);
   } catch (error) {
+    console.error("Error adding todo:", error);
     return jsonResponse({ error: "Invalid JSON" }, 400);
   }
 };
