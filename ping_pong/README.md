@@ -4,6 +4,10 @@
 
 - `docker build --pull -t ping-pong . && k3d image import ping-pong && kubectl rollout restart deployment ping-pong-dep -n exercises`
 
+### Troubleshooting
+
+- Dep missing: apply manifests `kubectl apply -f manifests/`
+
 ### Exercise 1.9
 
 - `docker build --pull -t ping-pong . && k3d image import ping-pong`
@@ -16,8 +20,10 @@
 
 - See `log_output` folder
 
-
 ### Exercise 2.3
 
 - See `log_output` folder
 
+### Exercise 2.7
+
+![alt text](2.7.png)

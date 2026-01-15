@@ -20,6 +20,14 @@
 - Is `kubectl` up and running? `k3d cluster start k3s-default`
 - Show cluster info with `kubectl cluster-info`
 
+### Logs
+
+- Get pod names: `kubectl get pods -n exercises`
+- View logs for a specific pod: `kubectl logs <pod-name> -n exercises`
+- View logs for all pods in a deployment: `kubectl logs -l app=<app-name> -n exercises`
+- Follow logs in real-time: `kubectl logs -f <pod-name> -n exercises`
+- View logs from a specific container in a pod: `kubectl logs <pod-name> -c <container-name> -n exercises`
+
 ## Commands
 
 ### Exercise 1.7
