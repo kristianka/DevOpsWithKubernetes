@@ -7,16 +7,12 @@ const server = Bun.serve({
   port: Bun.env.PORT ? parseInt(Bun.env.PORT) : 3000,
   routes: {
     "/": async (req) => {
-      // health check endpoint required by Ingress
-      return new Response("ok", { status: 200 });
-    },
-    "/pingpong": async (req) => {
       try {
         const counter = await incrementCounter();
-        console.log("Received /pingpong request, counter =", counter);
+        console.log("Received / request, counter =", counter);
         return new Response(`pong ${counter}`);
       } catch (error) {
-        console.error("Error handling /pingpong request", error);
+        console.error("Error handling / request", error);
         return new Response("Internal Server Error", { status: 500 });
       }
     },
