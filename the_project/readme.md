@@ -36,3 +36,7 @@ Testing new technologies! Originally tried Deno, but couldn't get env values wor
 ### Exercise 2.4
 
 - `kubectl create namespace project`
+
+### Exercise 3.5
+
+![alt text](3.5.png)

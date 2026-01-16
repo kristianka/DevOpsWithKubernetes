@@ -7,26 +7,21 @@ data:
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: projectdb
-
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: postgres-svc
   namespace: project
 spec:
-  clusterIP: None  # Headless service for StatefulSet
+  clusterIP: None
   selector:
     app: postgres
   ports:
     - name: postgres
-      protocol: TCP
       port: 5432
       targetPort: 5432
-
 ---
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -47,19 +42,18 @@ spec:
         - name: postgres
           image: postgres:18-alpine
           ports:
-            - name: postgres
-              containerPort: 5432
+            - containerPort: 5432
           env:
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                configMapKeyRef:
-                  name: postgres-config
-                  key: POSTGRES_PASSWORD
             - name: POSTGRES_USER
               valueFrom:
                 configMapKeyRef:
                   name: postgres-config
                   key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:
@@ -67,21 +61,14 @@ spec:
                   key: POSTGRES_DB
           volumeMounts:
             - name: postgres-storage
-              mountPath: /var/lib/postgresql
-              subPath: postgres
-          resources:
-            requests:
-              cpu: 100m
-              memory: 128Mi
-            limits:
-              cpu: 500m
-              memory: 256Mi
+              mountPath: /var/lib/postgresql/data
   volumeClaimTemplates:
     - metadata:
         name: postgres-storage
       spec:
-        accessModes: ["ReadWriteOnce"]
-        storageClassName: local-path
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: project-pv
         resources:
           requests:
             storage: 1Gi

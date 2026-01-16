@@ -1,0 +1,14 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: todo-server-backendconfig
+  namespace: project
+spec:
+  healthCheck:
+    checkIntervalSec: 30
+    timeoutSec: 10
+    healthyThreshold: 1
+    unhealthyThreshold: 3
+    type: HTTP
+    requestPath: /healthz
+    port: 5000

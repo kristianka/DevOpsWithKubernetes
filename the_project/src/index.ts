@@ -66,6 +66,7 @@ const server = Bun.serve({
       }
     },
     [`/project/hello`]: () => new Response("Hello, Bun!"),
+    [`/healthz`]: () => new Response("OK", { status: 200 }),
     [`/project/json`]: () =>
       new Response(JSON.stringify({ message: "Hello, JSON!" }), {
         headers: { "Content-Type": "application/json" }
