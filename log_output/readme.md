@@ -70,4 +70,8 @@
 
 ### Exercise 3.2
 
-[text](readme.md)
+![text](3.2.png)
+
+### Exercise 3.3
+
+![alt text](3.3.png)
