@@ -6,6 +6,10 @@ await initDB();
 const server = Bun.serve({
   port: Bun.env.PORT ? parseInt(Bun.env.PORT) : 3000,
   routes: {
+    "/": async (req) => {
+      // health check endpoint required by Ingress
+      return new Response("ok", { status: 200 });
+    },
     "/pingpong": async (req) => {
       try {
         const counter = await incrementCounter();

@@ -1,5 +1,15 @@
 ## Commands to run
 
+### GKE Deployment
+
+#### All-in-one command for GKE updates
+
+- `docker build -t gcr.io/dwk-gke-484423/log-output:latest . && docker push gcr.io/dwk-gke-484423/log-output:latest && kubectl rollout restart deployment log-output-dep -n exercises`
+
+#### Misc
+
+- Get deployment url `kubectl get svc`
+
 ### All-in-one command to restart
 
 - `docker build --pull -t log-output . && k3d image import log-output && kubectl rollout restart deployment log-output-dep -n exercises`
@@ -57,3 +67,7 @@
 ### Exercise 2.5
 
 ![alt text](2.5.png)
+
+### Exercise 3.2
+
+[text](readme.md)

@@ -29,10 +29,10 @@ spec:
           # image: ping-pong # local
           image: gcr.io/dwk-gke-484423/ping-pong:latest #gcloud
           ports:
-            - containerPort: 5000
+            - containerPort: 3000
           env:
             - name: PORT
-              value: "5000"
+              value: "3000"
             - name: POSTGRES_HOST
               value: "postgres-stset-0.postgres-svc"
             - name: POSTGRES_PORT
@@ -62,7 +62,6 @@ spec:
             # volumeMounts:
             # - name: shared-logs
             #   mountPath: /usr/src/app/shared
-
 
 # make sure to build and load the image before (see readme)
 # apply changes: kubectl apply -f manifests/deployment.yaml

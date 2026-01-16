@@ -13,7 +13,7 @@ spec:
       labels:
         app: log-output
     spec:
-    # add permission to read the files
+      # add permission to read the files
       # securityContext:
       #   runAsUser: 1000        # bun user UID (common in oven/bun image)
       #   runAsGroup: 1000       # bun group GID
@@ -42,21 +42,22 @@ spec:
         #       mountPath: /usr/src/app/shared
 
         - name: log-output
-          imagePullPolicy: Never
-          image: log-output
+          # imagePullPolicy: Never
+          # image: log-output
+          image: gcr.io/dwk-gke-484423/log-output:latest
           volumeMounts:
-          #   - name: shared-logs
-          #     mountPath: /usr/src/app/shared
+            #   - name: shared-logs
+            #     mountPath: /usr/src/app/shared
             - name: config-volume
               mountPath: /usr/src/app/config
           env:
-          - name: PING_PONG_URL
-            value: "http://ping-pong-svc:80/pongs"
-          - name: MESSAGE
-            valueFrom:
-              configMapKeyRef:
-                name: logoutput-configmap
-                key: MESSAGE
+            - name: PING_PONG_URL
+              value: "http://ping-pong-svc:80/pongs"
+            - name: MESSAGE
+              valueFrom:
+                configMapKeyRef:
+                  name: logoutput-configmap
+                  key: MESSAGE
       volumes:
         - name: config-volume
           configMap:
