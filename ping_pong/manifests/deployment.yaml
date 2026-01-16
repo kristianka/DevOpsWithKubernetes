@@ -13,19 +13,21 @@ spec:
       labels:
         app: ping-pong
     spec:
-      securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: OnRootMismatch
-      volumes:
-      - name: shared-logs
-        persistentVolumeClaim:
-          claimName: log-claim
+      # securityContext:
+      #   runAsUser: 1000
+      #   runAsGroup: 1000
+      #   fsGroup: 1000
+      #   fsGroupChangePolicy: OnRootMismatch
+      # volumes:
+      # - name: shared-logs
+      #   persistentVolumeClaim:
+      #     claimName: log-claim
+
       containers:
         - name: ping-pong
-          imagePullPolicy: Never # local image
-          image: ping-pong
+          # imagePullPolicy: Never # local image
+          # image: ping-pong # local
+          image: gcr.io/dwk-gke-484423/ping-pong:latest #gcloud
           ports:
             - containerPort: 5000
           env:
@@ -52,11 +54,11 @@ spec:
                   key: POSTGRES_DB
           resources:
             requests:
-              cpu: 10m
-              memory: 32Mi
+              cpu: 5m
+              memory: 16Mi
             limits:
-              cpu: 100m
-              memory: 64Mi
+              cpu: 50m
+              memory: 32Mi
             # volumeMounts:
             # - name: shared-logs
             #   mountPath: /usr/src/app/shared

@@ -71,17 +71,17 @@ spec:
               subPath: postgres
           resources:
             requests:
-              cpu: 100m
-              memory: 128Mi
+              cpu: 50m
+              memory: 64Mi
             limits:
-              cpu: 500m
-              memory: 256Mi
+              cpu: 200m
+              memory: 128Mi
   volumeClaimTemplates:
     - metadata:
         name: postgres-storage
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: local-path
+        storageClassName: standard
         resources:
           requests:
             storage: 1Gi
