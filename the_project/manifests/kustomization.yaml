@@ -13,3 +13,8 @@ resources:
   - deployment.yaml
   - ingress.yaml
   - job.yaml
+
+images:
+  - name: gcr.io/PROJECT_ID/todo-server
+    newName: gcr.io/dwk-gke-484423/todo-server
+    newTag: latest

@@ -44,9 +44,7 @@ spec:
 
       containers:
         - name: todo-server
-          # imagePullPolicy: Never # local image
-          # image: todo-server
-          image: gcr.io/dwk-gke-484423/todo-server:latest
+          image: gcr.io/PROJECT_ID/todo-server
           imagePullPolicy: Always
 
           env:
