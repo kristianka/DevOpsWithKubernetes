@@ -1,55 +1,59 @@
 name: Delete GKE namespaces for branches
 
 on:
-    delete:
+  delete:
 
 env:
-    PROJECT_ID: ${{ secrets.PROJECT_ID }}
-    GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
-    GKE_ZONE: ${{ secrets.GKE_ZONE }}
-    IMAGE: todo-server
-    DEPLOYMENT: todo-server-dep
+  PROJECT_ID: ${{ secrets.PROJECT_ID }}
+  GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
+  GKE_ZONE: ${{ secrets.GKE_ZONE }}
+  IMAGE: todo-server
+  DEPLOYMENT: todo-server-dep
 
 jobs:
-    delete-namespaces:
-        name: Delete GKE namespaces for branches
-        runs-on: ubuntu-latest
-        environment: deploy
+  delete-namespaces:
+    name: Delete GKE namespaces for branches
+    runs-on: ubuntu-latest
+    environment: deploy
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            - name: Validate secrets
-              run: |
-                  if [ -z "${{ secrets.GKE_SA_KEY }}" ]; then
-                    echo "::error::Secret GKE_SA_KEY is not set. Please configure it in GitHub repository settings."
-                    exit 1
-                  fi
-                  if [ -z "${{ secrets.PROJECT_ID }}" ]; then
-                    echo "::error::Secret PROJECT_ID is not set. Please configure it in GitHub repository settings."
-                    exit 1
-                  fi
+      - name: Validate secrets
+        run: |
+          if [ -z "${{ secrets.GKE_SA_KEY }}" ]; then
+            echo "::error::Secret GKE_SA_KEY is not set. Please configure it in GitHub repository settings."
+            exit 1
+          fi
+          if [ -z "${{ secrets.PROJECT_ID }}" ]; then
+            echo "::error::Secret PROJECT_ID is not set. Please configure it in GitHub repository settings."
+            exit 1
+          fi
 
-            - name: Authenticate to Google Cloud
-              id: auth
-              uses: google-github-actions/auth@v2
-              with:
-                  credentials_json: ${{ secrets.GKE_SA_KEY }}
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GKE_SA_KEY }}
 
-            - name: Set up Cloud SDK
-              uses: google-github-actions/setup-gcloud@v2
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
 
-            - name: Get GKE credentials
-              uses: google-github-actions/get-gke-credentials@v2
-              with:
-                  cluster_name: ${{ env.GKE_CLUSTER }}
-                  project_id: ${{ env.PROJECT_ID }}
-                  location: ${{ env.GKE_ZONE }}
+      - name: Get GKE credentials
+        uses: google-github-actions/get-gke-credentials@v2
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER }}
+          project_id: ${{ env.PROJECT_ID }}
+          location: ${{ env.GKE_ZONE }}
 
-            - name: Delete namespace for deleted branch
-              run: |
-                  BRANCH_NAME=${GITHUB_REF#refs/heads/}
-                  NAMESPACE="branch-${BRANCH_NAME//\//-}"
-                  echo "Deleting namespace: $NAMESPACE"
-                  kubectl delete namespace $NAMESPACE || echo "Namespace $NAMESPACE does not exist"
+      - name: Delete namespace for deleted branch
+        run: |
+          BRANCH_NAME=${GITHUB_EVENT_REF#refs/heads/}
+          if [ "$BRANCH_NAME" = "main" ]; then
+            NAMESPACE="project"
+          else
+            NAMESPACE="$BRANCH_NAME"
+          fi
+          echo "Deleting namespace: $NAMESPACE"
+          kubectl delete namespace $NAMESPACE || echo "Namespace $NAMESPACE does not exist"
