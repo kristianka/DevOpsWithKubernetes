@@ -11,10 +11,13 @@ export const Todos = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Use current page origin + base path for API calls
+  const apiBase = `${window.location.origin}${process.env.CLIENT_API || ""}`;
+
   const fetchTodos = async () => {
     try {
       // fetch todos from server
-      const res = await fetch(`${process.env.CLIENT_API}/todos`);
+      const res = await fetch(`${apiBase}/todos`);
       if (!res.ok) {
         throw new Error("Failed to fetch todos");
       }
@@ -36,7 +39,7 @@ export const Todos = () => {
 
   const addTodo = async (text: string) => {
     try {
-      const res = await fetch(`${process.env.CLIENT_API}/todos`, {
+      const res = await fetch(`${apiBase}/todos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text })
