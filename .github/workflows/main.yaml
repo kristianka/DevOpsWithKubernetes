@@ -13,7 +13,7 @@ env:
   GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
   GKE_ZONE: ${{ secrets.GKE_ZONE }}
   IMAGE: todo-server
-  SERVICE: todo-server
+  SERVICE: project
 
 jobs:
   build-publish-deploy:
