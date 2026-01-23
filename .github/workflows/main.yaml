@@ -13,7 +13,7 @@ env:
   GKE_CLUSTER: ${{ secrets.GKE_CLUSTER }}
   GKE_ZONE: ${{ secrets.GKE_ZONE }}
   IMAGE: todo-server
-  SERVICE: todo-server
+  DEPLOYMENT: todo-server-dep
 
 jobs:
   build-publish-deploy:
@@ -102,5 +102,5 @@ jobs:
           kustomize edit set namespace $NAMESPACE
           kustomize edit set image PROJECT/IMAGE=$IMAGE_TAG
           kustomize build . | kubectl apply -f -
-          kubectl rollout status deployment $SERVICE
+          kubectl rollout status deployment $DEPLOYMENT
           kubectl get services -o wide
