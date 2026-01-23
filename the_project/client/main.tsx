@@ -6,6 +6,7 @@ function App() {
   return (
     <div>
       <h1>The Project App</h1>
+      <p>hi from another branch</p>
       <RandomImage />
       <Todos />
     </div>
