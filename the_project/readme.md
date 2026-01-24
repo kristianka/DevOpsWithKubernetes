@@ -86,3 +86,9 @@ To summarise in a neat table:
 - `gcloud storage buckets create gs://dwk-project-backup --location=europe-north1`
 - `kubectl create secret generic gcs-backup-secret --namespace=project --from-file=service-account-key=dwk-gke-object.json --from-literal=bucket-name=dwk-project-backup`
 - Remember, not in kustomization, so manually run with `kubectl apply -f backup.yaml -n project`
+
+### Exercise 3.12
+
+- In Google Cloud Console: GKE -> Workloads -> `todo-server-dep` -> Container logs
+
+![alt text](3.12.png)
