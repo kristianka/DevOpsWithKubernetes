@@ -28,6 +28,12 @@ spec:
           # imagePullPolicy: Never # local image
           # image: ping-pong # local
           image: gcr.io/dwk-gke-484423/ping-pong:latest #gcloud
+          readinessProbe:
+            initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            httpGet:
+              path: /readyz
+              port: 3000
           ports:
             - containerPort: 3000
           env:

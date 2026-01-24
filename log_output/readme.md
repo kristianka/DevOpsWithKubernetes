@@ -8,7 +8,7 @@
 
 #### Misc
 
-- Get deployment url `kubectl get svc`
+- Get deployment url `kubectl get svc` or `kubectl get gateway dwk-gateway -n exercises`
 
 ### All-in-one command to restart
 
@@ -75,3 +75,8 @@
 ### Exercise 3.3
 
 ![alt text](3.3.png)
+
+### Exercise 4.1
+
+- See logs `kubectl get pods -n exercises`
+- See specific pod logs, e.g. `kubectl describe pod log-output-dep-56bb457b96-d9vc9 -n exercises`

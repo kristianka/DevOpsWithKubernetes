@@ -32,7 +32,27 @@ const server = Bun.serve({
         return new Response("Error fetching pong count", { status: 500 });
       }
     },
-    "/health": () => new Response("ok")
+    "/health": () => new Response("ok"),
+    "/healthz": () => new Response("ok"),
+    "/readyz": async () => {
+      try {
+        // Check if we can connect to ping-pong service
+        const response = await fetch(PING_PONG_URL, {
+          signal: AbortSignal.timeout(2000)
+        });
+
+        if (!response.ok) {
+          console.error("Ping-pong service returned non-ok status:", response.status);
+          return new Response("ping-pong not ready", { status: 503 });
+        }
+
+        console.log("Ping-pong service is ready!");
+        return new Response("ready", { status: 200 });
+      } catch (error) {
+        console.error("Ping-pong service not ready:", error);
+        return new Response("ping-pong not reachable", { status: 503 });
+      }
+    }
   }
 });
 

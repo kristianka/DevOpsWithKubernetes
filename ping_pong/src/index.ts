@@ -1,4 +1,4 @@
-import { initDB } from "./db";
+import { initDB, pool } from "./db";
 import { getCounter, incrementCounter } from "./requests";
 
 await initDB();
@@ -24,6 +24,18 @@ const server = Bun.serve({
       } catch (error) {
         console.error("Error handling /pongs request", error);
         return new Response("Internal Server Error", { status: 500 });
+      }
+    },
+    "/healthz": () => new Response("ok"),
+    "/readyz": async () => {
+      try {
+        // Check database connectivity
+        await pool.query("SELECT 1");
+        console.log("Database is ready!");
+        return new Response("ready", { status: 200 });
+      } catch (error) {
+        console.error("Database not ready:", error);
+        return new Response("not ready", { status: 503 });
       }
     }
   }
