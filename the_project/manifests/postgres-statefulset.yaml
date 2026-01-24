@@ -43,6 +43,13 @@ spec:
           image: postgres:18-alpine
           ports:
             - containerPort: 5432
+          resources:
+            requests:
+              cpu: 10m
+              memory: 256Mi
+            limits:
+              cpu: 100m
+              memory: 1Gi
           env:
             - name: POSTGRES_USER
               valueFrom:

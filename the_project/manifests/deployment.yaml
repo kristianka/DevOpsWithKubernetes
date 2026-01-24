@@ -47,6 +47,14 @@ spec:
           image: gcr.io/PROJECT_ID/todo-server
           imagePullPolicy: Always
 
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+
           env:
             - name: PORT
               value: "5000"
