@@ -9,7 +9,7 @@ import {
   listPublicFiles,
   IMAGE_DIR
 } from "../misc";
-import { getTodos, addTodo } from "../routes/todos";
+import { getTodos, addTodo, updateTodo } from "../routes/todos";
 import { initDB, pool } from "./db";
 
 let inFlightDownload: Promise<void> | null = null;
@@ -148,6 +148,8 @@ const server = Bun.serve({
         return getTodos(req);
       } else if (req.method === "POST") {
         return addTodo(req);
+      } else if (req.method === "PUT") {
+        return updateTodo(req);
       }
       return new Response("Method not allowed", { status: 405 });
     }

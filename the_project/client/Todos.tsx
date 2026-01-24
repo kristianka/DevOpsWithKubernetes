@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 interface Todo {
   id: number;
   text: string;
+  completed?: boolean;
 }
 
 export const Todos = () => {
@@ -57,6 +58,38 @@ export const Todos = () => {
     }
   };
 
+  const updateTodo = async (id: number) => {
+    try {
+      const res = await fetch(`${apiBase}/todos`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id })
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update todo");
+      }
+
+      const data = await res.json();
+      setTodos((prevTodos) => prevTodos.map((todo) => (todo.id === id ? data.updatedTodo : todo)));
+    } catch (error) {
+      setError("Failed to update todo");
+      console.error("Error updating todo:", error);
+    }
+  };
+
+  const unCompletedTodos = todos.filter((t) => !t.completed);
+  const completedTodos = todos.filter((t) => t.completed);
+
+  const renderTodoItem = (t: Todo, index: number) => (
+    <li key={t.id}>
+      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+        <span>{t.text}</span>
+        <button onClick={() => updateTodo(t.id)}>{t.completed ? "Undo" : "Mark Complete"}</button>
+      </div>
+    </li>
+  );
+
   return (
     <div>
       <div style={{ marginTop: "1rem" }}>
@@ -83,11 +116,10 @@ export const Todos = () => {
       </div>
       {loading && <p>Loading todos...</p>}
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <div>
-        {todos?.map((t, index) => (
-          <li key={t.id}>{t.text}</li>
-        ))}
-      </div>
+      <h2>Todos</h2>
+      <ul>{unCompletedTodos?.map((t, index) => renderTodoItem(t, index))}</ul>
+      <h2>Completed Todos</h2>
+      <ul>{completedTodos?.map((t, index) => renderTodoItem(t, index))}</ul>
     </div>
   );
 };
