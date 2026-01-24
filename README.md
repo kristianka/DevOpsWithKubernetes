@@ -53,3 +53,4 @@ Note: Folders also have readmes that have some documentation!
 ### Chapter 4
 
 - [4.1](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.1)
+- [4.2](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.2)

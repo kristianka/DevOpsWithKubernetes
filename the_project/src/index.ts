@@ -10,7 +10,7 @@ import {
   IMAGE_DIR
 } from "../misc";
 import { getTodos, addTodo } from "../routes/todos";
-import { initDB } from "./db";
+import { initDB, pool } from "./db";
 
 let inFlightDownload: Promise<void> | null = null;
 
@@ -66,7 +66,23 @@ const server = Bun.serve({
       }
     },
     [`/project/hello`]: () => new Response("Hello, Bun!"),
+
+    // Health check endpoint - basic liveness check (doesn't check DB)
     [`/healthz`]: () => new Response("OK", { status: 200 }),
+
+    // Readiness check endpoint - checks if app is ready to serve traffic (includes DB check)
+    "/readyz": async () => {
+      try {
+        // Check database connectivity
+        await pool.query("SELECT 1");
+        console.log("Database is ready!");
+        return new Response("ready", { status: 200 });
+      } catch (error) {
+        console.error("Database not ready:", error);
+        return new Response("not ready", { status: 503 });
+      }
+    },
+
     [`/project/json`]: () =>
       new Response(JSON.stringify({ message: "Hello, JSON!" }), {
         headers: { "Content-Type": "application/json" }

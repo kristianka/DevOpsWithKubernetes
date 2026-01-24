@@ -55,6 +55,28 @@ spec:
               cpu: 100m
               memory: 128Mi
 
+          # liveness probe: checks if the container is alive (basic health check)
+          # if this fails, Kubernetes will restart the container
+          livenessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 5000
+
+          # readiness probe: checks if the app is ready to serve traffic (includes DB check)
+          # if this fails, the pod is removed from service endpoints (no traffic sent)
+          readinessProbe:
+            initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            timeoutSeconds: 2
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: 5000
+
           env:
             - name: PORT
               value: "5000"
@@ -79,6 +101,8 @@ spec:
                 configMapKeyRef:
                   name: postgres-config
                   key: POSTGRES_PASSWORD
+              # TEMPORARY TEST: Uncomment line below to test probe failure
+              # value: "wrong_password"
             - name: POSTGRES_DB
               valueFrom:
                 configMapKeyRef:

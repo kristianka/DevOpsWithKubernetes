@@ -20,7 +20,15 @@ Testing new technologies! Originally tried Deno, but couldn't get env values wor
 
 ## Commands
 
-### All-in-one command to restart
+### GKE Deployment
+
+#### All-in-one command for GKE updates
+
+- `docker build -t gcr.io/dwk-gke-484423/todo-server:latest . && docker push gcr.io/dwk-gke-484423/todo-server:latest && kubectl rollout restart deployment todo-server-dep -n project`
+
+### Local K3D Development
+
+#### All-in-one command to restart
 
 - `docker build --pull -t todo-server . && k3d image import todo-server && kubectl rollout restart deployment todo-server-dep -n project`
 
