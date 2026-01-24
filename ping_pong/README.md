@@ -41,3 +41,9 @@ Remember to turn off GCLOUD when not using!
 ### Exercise 3.1
 
 ![alt text](3.1.png)
+
+### Exercuse 4.3
+
+- `helm install prometheus-community/kube-prometheus-stack --generate-name --namespace prometheus`
+- `kubectl -n prometheus port-forward prometheus-kube-prometheus-stack-1714-prometheus-0 9090:9090`
+- In Prometheus `count by (pod) (kube_pod_info{namespace="prometheus", created_by_kind="StatefulSet"})`
