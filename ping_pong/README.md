@@ -47,3 +47,8 @@ Remember to turn off GCLOUD when not using!
 - `helm install prometheus-community/kube-prometheus-stack --generate-name --namespace prometheus`
 - `kubectl -n prometheus port-forward prometheus-kube-prometheus-stack-1714-prometheus-0 9090:9090`
 - In Prometheus `count by (pod) (kube_pod_info{namespace="prometheus", created_by_kind="StatefulSet"})`
+
+### Exercise 4.4
+
+- `kubectl create namespace argo-rollouts`
+- `kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml`
