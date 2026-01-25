@@ -1,11 +1,11 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - deployment.yaml
-  - service.yaml
-  - postgres-statefulset.yaml
-  - httproute.yaml
+- deployment.yaml
+- service.yaml
+- postgres-statefulset.yaml
+- httproute.yaml
 images:
-  - name: PROJECT/IMAGE
-    newName: typescriptlover/ping_pong
-    newTag: placeholder
+- name: PROJECT/IMAGE
+  newName: typescriptlover/ping_pong
+  newTag: 06eaaff46885b39cce00cc9cf020cd5ae3d4686a

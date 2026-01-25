@@ -12,4 +12,4 @@ resources:
 images:
 - name: PROJECT/IMAGE
   newName: typescriptlover/log_output
-  newTag: d9f7f7d5a67119887144c68aa5d9b318f2972ba8
+  newTag: 06eaaff46885b39cce00cc9cf020cd5ae3d4686a
