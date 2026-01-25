@@ -10,6 +10,10 @@ resources:
 - backendconfig.yaml
 
 patches:
+- path: persistentvolumeclaim-patch.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: project-claim
 - path: deployment-patch.yaml
   target:
     kind: Deployment
