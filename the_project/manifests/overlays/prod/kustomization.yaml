@@ -4,24 +4,24 @@ kind: Kustomization
 namespace: project-prod
 
 resources:
-  - namespace.yaml
-  - ../../base
-  - backup.yaml
-  - backendconfig.yaml
+- namespace.yaml
+- ../../base
+- backup.yaml
+- backendconfig.yaml
 
 patches:
-  - path: deployment-patch.yaml
-    target:
-      kind: Deployment
-      name: todo-server-dep
+- path: deployment-patch.yaml
+  target:
+    kind: Deployment
+    name: todo-server-dep
 
 namePrefix: prod-
 
 replicas:
-  - name: todo-server-dep
-    count: 3
+- count: 3
+  name: todo-server-dep
 
 images:
-  - name: PROJECT/IMAGE
-    newName: typescriptlover/the_project
-    # Production uses tagged commits, so the tag will be updated via CI/CD
+- name: PROJECT/IMAGE
+  newName: typescriptlover/the_project
+  newTag: v1.0.1
