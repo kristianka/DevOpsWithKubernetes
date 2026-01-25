@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-server-svc
+  namespace: project
+  annotations:
+    cloud.google.com/backend-config: '{"default": "todo-server-backendconfig"}'
+spec:
+  selector:
+    app: todo-server
+  ports:
+    - name: http
+      port: 2345 # Service port referenced by Ingress
+      targetPort: 5000 # Container listens on 5000
+      protocol: TCP
