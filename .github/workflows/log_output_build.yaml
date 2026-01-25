@@ -1,0 +1,45 @@
+name: Build and publish log output app
+
+on:
+    push:
+        branches:
+            - "**"
+        paths:
+            - "log_output/**"
+            - "ping_pong/**"
+            - ".github/workflows/log_output_build.yaml"
+
+jobs:
+    build-publish:
+        name: Build, Push, Release log output app
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Login to Docker Hub
+              uses: docker/login-action@v3
+              with:
+                  username: ${{ secrets.DOCKERHUB_USERNAME }}
+                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+            # tag image with the GitHub SHA to get a unique tag
+            - name: Build and publish log output app
+              working-directory: ./log_output
+              run: |-
+                  docker build --tag "kristianka/dwk1:$GITHUB_SHA" .
+                  docker push "kristianka/dwk1:$GITHUB_SHA"
+
+            - name: Set up Kustomize
+              uses: imranismail/setup-kustomize@v2
+
+            - name: Use right image
+              working-directory: ./log_output/manifests
+              run: kustomize edit set image PROJECT/IMAGE=kristianka/dwk1:$GITHUB_SHA
+
+            - name: commit kustomization.yaml to GitHub
+              uses: EndBug/add-and-commit@v9
+              with:
+                  add: "log_output/manifests/kustomization.yaml"
+                  message: New version released ${{ github.sha }}

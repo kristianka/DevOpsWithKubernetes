@@ -80,3 +80,10 @@
 
 - See logs `kubectl get pods -n exercises`
 - See specific pod logs, e.g. `kubectl describe pod log-output-dep-56bb457b96-d9vc9 -n exercises`
+
+### Eexercise 4.7
+
+- `kubectl create namespace argocd`
+- `kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml`
+- `kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'`
+- `kubectl get svc -n argocd`

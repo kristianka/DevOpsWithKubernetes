@@ -57,3 +57,5 @@ Note: Folders also have readmes that have some documentation!
 - [4.3](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.3)
 - [4.4](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.4)
 - [4.5](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.5)
+- 4.6 skipped
+- [4.7](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.7)

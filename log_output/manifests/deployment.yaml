@@ -4,7 +4,7 @@ metadata:
   name: log-output-dep
   namespace: exercises
 spec:
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: log-output
@@ -44,7 +44,8 @@ spec:
         - name: log-output
           # imagePullPolicy: Never
           # image: log-output
-          image: gcr.io/dwk-gke-484423/log-output:latest
+          # image: gcr.io/dwk-gke-484423/log-output:latest
+          image: PROJECT/IMAGE
           readinessProbe:
             initialDelaySeconds: 10 # Initial delay until the readiness is tested
             periodSeconds: 5 # How often to test
