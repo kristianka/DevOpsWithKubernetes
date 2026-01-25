@@ -100,3 +100,9 @@ To summarise in a neat table:
 - In Google Cloud Console: GKE -> Workloads -> `todo-server-dep` -> Container logs
 
 ![alt text](3.12.png)
+
+### Exercise 4.9
+
+- Get staging ip with `kubectl get ingress -n project-staging`
+
+![alt text](4.9.png)
