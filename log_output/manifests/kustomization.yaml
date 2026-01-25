@@ -11,5 +11,5 @@ resources:
   - httproute.yaml
 images:
   - name: PROJECT/IMAGE
-    newName: kristianka/dwk1
+    newName: kristianka/log_output
     newTag: placeholder
