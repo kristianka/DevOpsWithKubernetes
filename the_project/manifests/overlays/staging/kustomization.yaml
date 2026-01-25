@@ -4,21 +4,21 @@ kind: Kustomization
 namespace: project-staging
 
 resources:
-  - namespace.yaml
-  - ../../base
-  - backendconfig.yaml
+- namespace.yaml
+- ../../base
+- backendconfig.yaml
 patches:
-  - path: deployment-patch.yaml
-    target:
-      kind: Deployment
-      name: todo-server-dep
-  - path: service-patch.yaml
-    target:
-      kind: Service
-      name: todo-server-svc
+- path: deployment-patch.yaml
+  target:
+    kind: Deployment
+    name: todo-server-dep
+- path: service-patch.yaml
+  target:
+    kind: Service
+    name: todo-server-svc
 namePrefix: staging-
 
 images:
-  - name: PROJECT/IMAGE
-    newName: typescriptlover/the_project
-    newTag: a0b8acf77bf973699dd69b61b90b904a8f8405cb
+- name: PROJECT/IMAGE
+  newName: typescriptlover/the_project
+  newTag: fa5531ebef35bc1bd06f2f18318ee7ab5ddcc051
