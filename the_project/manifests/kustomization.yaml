@@ -4,19 +4,19 @@ kind: Kustomization
 namespace: project
 
 resources:
-  - namespace.yaml
-  - persistentvolume.yaml
-  - persistentvolumeclaim.yaml
-  - postgres-statefulset.yaml
-  - backendconfig.yaml
-  - service.yaml
-  - deployment.yaml
-  - ingress.yaml
-  - job.yaml
+- namespace.yaml
+- persistentvolume.yaml
+- persistentvolumeclaim.yaml
+- postgres-statefulset.yaml
+- backendconfig.yaml
+- service.yaml
+- deployment.yaml
+- ingress.yaml
+- job.yaml
 
-images:
   # - name: gcr.io/PROJECT_ID/todo-server
   #   newName: gcr.io/dwk-gke-484423/todo-server
-  - name: PROJECT/IMAGE
-    newName: DOCKERHUB_USERNAME/the_project
-    newTag: latest
+images:
+- name: PROJECT/IMAGE
+  newName: typescriptlover/the_project
+  newTag: 27e7c7bd07b9516c600a5a3b1731418bd77229a3
