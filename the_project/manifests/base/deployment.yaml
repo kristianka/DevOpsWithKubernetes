@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-server-dep
+  namespace: project
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: todo-server
+  template:
+    metadata:
+      labels:
+        app: todo-server
+    spec:
+      # add permission to read the files
+      securityContext:
+        runAsUser: 1000 # bun user UID (common in oven/bun image)
+        runAsGroup: 1000 # bun group GID
+        fsGroup: 1000 # ensure mounted volume gets group ownership
+        fsGroupChangePolicy: OnRootMismatch
+
+      initContainers:
+        - name: fix-public-permissions
+          image: busybox:1.36
+          command:
+            - sh
+            - -c
+            - |
+              chown -R 1000:1000 /usr/src/app/public 2>/dev/null || true
+              chmod -R g+rwX /usr/src/app/public || true
+          securityContext:
+            runAsUser: 0 # run as root just for permission change
+          volumeMounts:
+            - name: project-storage # must match volume name below
+              mountPath: /usr/src/app/public
+
+      volumes:
+        - name: project-storage
+          persistentVolumeClaim:
+            claimName: project-claim
+
+      containers:
+        - name: todo-server
+          # image: gcr.io/PROJECT_ID/todo-server
+          image: PROJECT/IMAGE
+          imagePullPolicy: Always
+
+          resources:
+            requests:
+              cpu: 10m
+              memory: 50Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+
+          # liveness probe: checks if the container is alive (basic health check)
+          # if this fails, Kubernetes will restart the container
+          livenessProbe:
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 2
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 5000
+
+          # readiness probe: checks if the app is ready to serve traffic (includes DB check)
+          # if this fails, the pod is removed from service endpoints (no traffic sent)
+          readinessProbe:
+            initialDelaySeconds: 10 # Initial delay until the readiness is tested
+            periodSeconds: 5 # How often to test
+            timeoutSeconds: 2
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: 5000
+
+          env:
+            - name: PORT
+              value: "5000"
+            - name: BASE_PATH
+              value: "/project" # allows to run exercises at the same time
+            - name: CLIENT_API
+              value: "/project"
+            - name: IMAGE_URL
+              value: "https://picsum.photos/1200"
+
+            - name: POSTGRES_HOST
+              value: "postgres-stset-0.postgres-svc"
+            - name: POSTGRES_PORT
+              value: "5432"
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_PASSWORD
+              # TEMPORARY TEST: Uncomment line below to test probe failure
+              # value: "wrong_password"
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-config
+                  key: POSTGRES_DB
+
+          ports:
+            - name: http
+              containerPort: 5000
+
+          volumeMounts:
+            - name: project-storage
+              mountPath: /usr/src/app/public

@@ -1,0 +1,6 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-server-dep
+spec:
+  replicas: 3 # Production has more replicas for high availability

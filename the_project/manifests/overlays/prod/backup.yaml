@@ -1,0 +1,67 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: postgres-backup
+spec:
+  schedule: "0 0 * * *" # every 24 hours
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: postgres:18-alpine
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  # Install gcloud CLI dependencies
+                  apk add --no-cache python3 py3-pip curl bash
+
+                  # Download and install gcloud
+                  curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz
+                  tar -xf google-cloud-cli-linux-x86_64.tar.gz
+                  ./google-cloud-sdk/install.sh --quiet --path-update false
+                  export PATH=$PATH:$(pwd)/google-cloud-sdk/bin
+
+                  # Set timestamp for backup file name
+                  TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+                  BACKUP_FILE="backup-${TIMESTAMP}.sql"
+
+                  # Create the backup using pg_dump
+                  echo "Creating backup: ${BACKUP_FILE}"
+                  PGPASSWORD="${POSTGRES_PASSWORD}" pg_dump -h postgres-svc -U "${POSTGRES_USER}" "${POSTGRES_DB}" > /tmp/${BACKUP_FILE}
+
+                  # Upload to Google Cloud Storage
+                  echo "Uploading to GCS bucket: ${GCS_BUCKET}"
+                  gcloud auth activate-service-account --key-file=/secrets/key.json
+                  gcloud storage cp /tmp/${BACKUP_FILE} gs://${GCS_BUCKET}/${BACKUP_FILE}
+
+                  echo "Backup completed successfully"
+              env:
+                - name: POSTGRES_USER
+                  valueFrom:
+                    configMapKeyRef:
+                      name: postgres-config
+                      key: POSTGRES_USER
+                - name: POSTGRES_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-secret
+                      key: POSTGRES_PASSWORD
+                - name: POSTGRES_DB
+                  valueFrom:
+                    configMapKeyRef:
+                      name: postgres-config
+                      key: POSTGRES_DB
+                - name: GCS_BUCKET
+                  value: "dwk-gke-484423-backup"
+              volumeMounts:
+                - name: gcp-key
+                  mountPath: /secrets
+                  readOnly: true
+          volumes:
+            - name: gcp-key
+              secret:
+                secretName: gcp-key-secret
