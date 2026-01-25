@@ -13,6 +13,7 @@ jobs:
     build-publish:
         name: Build, Push, Release log output app
         runs-on: ubuntu-latest
+        environment: deploy
 
         steps:
             - name: Checkout
