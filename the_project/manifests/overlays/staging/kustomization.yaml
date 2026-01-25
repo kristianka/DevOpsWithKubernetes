@@ -6,6 +6,7 @@ namespace: project-staging
 resources:
   - namespace.yaml
   - ../../base
+  - backendconfig.yaml
 patches:
   - path: deployment-patch.yaml
     target:
