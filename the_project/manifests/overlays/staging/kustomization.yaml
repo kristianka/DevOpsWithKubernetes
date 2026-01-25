@@ -4,12 +4,12 @@ kind: Kustomization
 namespace: project-staging
 
 resources:
-  - namespace.yaml
-  - ../../base
+- namespace.yaml
+- ../../base
 
 namePrefix: staging-
 
 images:
-  - name: PROJECT/IMAGE
-    newName: typescriptlover/the_project
-    # Staging automatically uses latest from main branch
+- name: PROJECT/IMAGE
+  newName: typescriptlover/the_project
+  newTag: ebdcb7d3f271a88ab222dd517078601544a81646
