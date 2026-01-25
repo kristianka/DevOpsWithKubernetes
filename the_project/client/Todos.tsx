@@ -118,7 +118,9 @@ export const Todos = () => {
       {error && <p style={{ color: "red" }}>{error}</p>}
       <h2>Todos</h2>
       <ul>{unCompletedTodos?.map((t, index) => renderTodoItem(t, index))}</ul>
+      {unCompletedTodos.length === 0 && <p>No todos available. Add a new todo!</p>}
       <h2>Completed Todos</h2>
+      {completedTodos.length === 0 && <p>No completed todos yet!</p>}
       <ul>{completedTodos?.map((t, index) => renderTodoItem(t, index))}</ul>
     </div>
   );
