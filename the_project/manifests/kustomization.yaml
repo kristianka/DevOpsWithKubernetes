@@ -15,6 +15,8 @@ resources:
   - job.yaml
 
 images:
-  - name: gcr.io/PROJECT_ID/todo-server
-    newName: gcr.io/dwk-gke-484423/todo-server
+  # - name: gcr.io/PROJECT_ID/todo-server
+  #   newName: gcr.io/dwk-gke-484423/todo-server
+  - name: PROJECT/IMAGE
+    newName: DOCKERHUB_USERNAME/the_project
     newTag: latest

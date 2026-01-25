@@ -44,7 +44,8 @@ spec:
 
       containers:
         - name: todo-server
-          image: gcr.io/PROJECT_ID/todo-server
+          # image: gcr.io/PROJECT_ID/todo-server
+          image: PROJECT/IMAGE
           imagePullPolicy: Always
 
           resources:
