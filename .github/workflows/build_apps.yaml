@@ -1,16 +1,17 @@
-name: Build and publish ping pong app
+name: Build and publish apps
 
 on:
     push:
         branches:
             - "**"
         paths:
+            - "log_output/**"
             - "ping_pong/**"
-            - ".github/workflows/ping_pong_build.yaml"
+            - ".github/workflows/build_apps.yaml"
 
 jobs:
     build-publish:
-        name: Build, Push, Release ping pong app
+        name: Build, Push, Release apps
         runs-on: ubuntu-latest
         environment: deploy
 
@@ -24,22 +25,36 @@ jobs:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            # tag image with the GitHub SHA to get a unique tag
+            # Build and push ping_pong
             - name: Build and publish ping pong app
               working-directory: ./ping_pong
               run: |-
                   docker build --tag "${{ secrets.DOCKERHUB_USERNAME }}/ping_pong:$GITHUB_SHA" .
                   docker push "${{ secrets.DOCKERHUB_USERNAME }}/ping_pong:$GITHUB_SHA"
 
+            # Build and push log_output
+            - name: Build and publish log output app
+              working-directory: ./log_output
+              run: |-
+                  docker build --tag "${{ secrets.DOCKERHUB_USERNAME }}/log_output:$GITHUB_SHA" .
+                  docker push "${{ secrets.DOCKERHUB_USERNAME }}/log_output:$GITHUB_SHA"
+
             - name: Set up Kustomize
               uses: imranismail/setup-kustomize@v2
 
-            - name: Use right image
+            # Update ping_pong kustomization
+            - name: Use right image for ping_pong
               working-directory: ./ping_pong/manifests
               run: kustomize edit set image PROJECT/IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/ping_pong:$GITHUB_SHA
 
-            - name: commit kustomization.yaml to GitHub
+            # Update log_output kustomization
+            - name: Use right image for log_output
+              working-directory: ./log_output/manifests
+              run: kustomize edit set image PROJECT/IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/log_output:$GITHUB_SHA
+
+            # Commit both kustomization files together
+            - name: commit kustomization.yaml files to GitHub
               uses: EndBug/add-and-commit@v9
               with:
-                  add: "ping_pong/manifests/kustomization.yaml"
+                  add: '["ping_pong/manifests/kustomization.yaml", "log_output/manifests/kustomization.yaml"]'
                   message: New version released ${{ github.sha }}
