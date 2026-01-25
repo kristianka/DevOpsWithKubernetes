@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-server-dep
+spec:
+  template:
+    spec:
+      containers:
+        - name: todo-server
+          env:
+            - name: POSTGRES_HOST
+              value: "staging-postgres-stset-0.staging-postgres-svc"

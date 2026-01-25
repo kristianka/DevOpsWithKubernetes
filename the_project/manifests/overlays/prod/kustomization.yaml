@@ -8,6 +8,9 @@ resources:
   - ../../base
   - backup.yaml
 
+patches:
+  - path: deployment-patch.yaml
+
 namePrefix: prod-
 
 replicas:
