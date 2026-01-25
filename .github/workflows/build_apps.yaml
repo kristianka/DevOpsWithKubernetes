@@ -58,3 +58,4 @@ jobs:
               with:
                   add: '["ping_pong/manifests/kustomization.yaml", "log_output/manifests/kustomization.yaml"]'
                   message: New version released ${{ github.sha }}
+                  pull: "--rebase --autostash"
