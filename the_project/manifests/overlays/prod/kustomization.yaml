@@ -10,6 +10,9 @@ resources:
 
 patches:
   - path: deployment-patch.yaml
+    target:
+      kind: Deployment
+      name: todo-server-dep
 
 namePrefix: prod-
 
