@@ -7,13 +7,17 @@ resources:
 - namespace.yaml
 - ../../base
 patches:
+<<<<<<< HEAD
   - path: deployment-patch.yaml
     target:
       kind: Deployment
       name: todo-server-dep
+=======
+- path: deployment-patch.yaml
+>>>>>>> 2f79377c8ce107fd99891b8828da4d2ad229a8c2
 namePrefix: staging-
 
 images:
 - name: PROJECT/IMAGE
   newName: typescriptlover/the_project
-  newTag: 417593eb395400775ccd832a686d371d92a43cf0
+  newTag: f46e1f552622560d26e6b0589f201a5e4ae8ec7b
