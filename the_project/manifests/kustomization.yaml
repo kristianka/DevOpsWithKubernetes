@@ -19,4 +19,4 @@ resources:
 images:
 - name: PROJECT/IMAGE
   newName: typescriptlover/the_project
-  newTag: 27e7c7bd07b9516c600a5a3b1731418bd77229a3
+  newTag: 75be201d6c9e8f1951e46c17fb4ac7afa981aa89
