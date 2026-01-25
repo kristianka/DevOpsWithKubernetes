@@ -8,10 +8,11 @@ resources:
   - ../../base
   - backup.yaml
 
-patchesStrategicMerge:
-  - deployment.yaml
-
 namePrefix: prod-
+
+replicas:
+  - name: todo-server-dep
+    count: 3
 
 images:
   - name: PROJECT/IMAGE
