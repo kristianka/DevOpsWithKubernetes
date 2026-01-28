@@ -1,61 +1,73 @@
 name: Build and publish apps
 
 on:
-    push:
-        branches:
-            - "**"
-        paths:
-            - "log_output/**"
-            - "ping_pong/**"
-            - ".github/workflows/build_apps.yaml"
+  push:
+    branches:
+      - "**"
+    paths:
+      - "log_output/**"
+      - "ping_pong/**"
+      - "dummy_site/**"
+      - ".github/workflows/build_apps.yaml"
 
 jobs:
-    build-publish:
-        name: Build, Push, Release apps
-        runs-on: ubuntu-latest
-        environment: deploy
+  build-publish:
+    name: Build, Push, Release apps
+    runs-on: ubuntu-latest
+    environment: deploy
 
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-            - name: Login to Docker Hub
-              uses: docker/login-action@v3
-              with:
-                  username: ${{ secrets.DOCKERHUB_USERNAME }}
-                  password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-            # Build and push ping_pong
-            - name: Build and publish ping pong app
-              working-directory: ./ping_pong
-              run: |-
-                  docker build --tag "${{ secrets.DOCKERHUB_USERNAME }}/ping_pong:$GITHUB_SHA" .
-                  docker push "${{ secrets.DOCKERHUB_USERNAME }}/ping_pong:$GITHUB_SHA"
+      # Build and push ping_pong
+      - name: Build and publish ping pong app
+        working-directory: ./ping_pong
+        run: |-
+          docker build --tag "${{ secrets.DOCKERHUB_USERNAME }}/ping_pong:$GITHUB_SHA" .
+          docker push "${{ secrets.DOCKERHUB_USERNAME }}/ping_pong:$GITHUB_SHA"
 
-            # Build and push log_output
-            - name: Build and publish log output app
-              working-directory: ./log_output
-              run: |-
-                  docker build --tag "${{ secrets.DOCKERHUB_USERNAME }}/log_output:$GITHUB_SHA" .
-                  docker push "${{ secrets.DOCKERHUB_USERNAME }}/log_output:$GITHUB_SHA"
+      # Build and push log_output
+      - name: Build and publish log output app
+        working-directory: ./log_output
+        run: |-
+          docker build --tag "${{ secrets.DOCKERHUB_USERNAME }}/log_output:$GITHUB_SHA" .
+          docker push "${{ secrets.DOCKERHUB_USERNAME }}/log_output:$GITHUB_SHA"
 
-            - name: Set up Kustomize
-              uses: imranismail/setup-kustomize@v2
+      # Build and push dummy_site
+      - name: Build and publish DummySite controller
+        working-directory: ./dummy_site
+        run: |-
+          docker build --tag "${{ secrets.DOCKERHUB_USERNAME }}/dummysite_controller:$GITHUB_SHA" .
+          docker push "${{ secrets.DOCKERHUB_USERNAME }}/dummysite_controller:$GITHUB_SHA"
+      - name: Set up Kustomize
+        uses: imranismail/setup-kustomize@v2
 
-            # Update ping_pong kustomization
-            - name: Use right image for ping_pong
-              working-directory: ./ping_pong/manifests
-              run: kustomize edit set image PROJECT/IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/ping_pong:$GITHUB_SHA
+      # Update ping_pong kustomization
+      - name: Use right image for ping_pong
+        working-directory: ./ping_pong/manifests
+        run: kustomize edit set image PROJECT/IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/ping_pong:$GITHUB_SHA
 
-            # Update log_output kustomization
-            - name: Use right image for log_output
-              working-directory: ./log_output/manifests
-              run: kustomize edit set image PROJECT/IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/log_output:$GITHUB_SHA
+      # Update log_output kustomization
+      - name: Use right image for log_output
+        working-directory: ./log_output/manifests
+        run: kustomize edit set image PROJECT/IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/log_output:$GITHUB_SHA
 
-            # Commit both kustomization files together
-            - name: commit kustomization.yaml files to GitHub
-              uses: EndBug/add-and-commit@v9
-              with:
-                  add: '["ping_pong/manifests/kustomization.yaml", "log_output/manifests/kustomization.yaml"]'
-                  message: New version released ${{ github.sha }}
-                  pull: "--rebase --autostash"
+      # Update dummy_site kustomization
+      - name: Use right image for dummy_site
+        working-directory: ./dummy_site/manifests
+        run: kustomize edit set image PROJECT/IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/dummysite_controller:$GITHUB_SHA
+
+      # Commit all kustomization files together
+      - name: commit kustomization.yaml files to GitHub
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: '["ping_pong/manifests/kustomization.yaml", "log_output/manifests/kustomization.yaml", "dummy_site/manifests/kustomization.yaml"]'
+          message: New version released ${{ github.sha }}
+          pull: "--rebase --autostash"
