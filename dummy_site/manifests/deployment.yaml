@@ -16,8 +16,11 @@ spec:
       serviceAccountName: dummysite-controller
       containers:
         - name: controller
-          image: PROJECT/IMAGE
+          image: typescriptlover/dummysite_controller:9a49e77fa387b905fc09c11450db87f9ee6048c8
           imagePullPolicy: Always
+          env:
+            - name: NODE_TLS_REJECT_UNAUTHORIZED # needed or auth fail
+              value: "0"
           resources:
             requests:
               memory: "64Mi"

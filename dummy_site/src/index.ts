@@ -171,24 +171,31 @@ const reconcileDummySite = async (dummySite: any) => {
 const watchDummySites = async () => {
   const watch = new k8s.Watch(kc);
 
-  const req = await watch.watch(
-    "/apis/stable.dwk/v1/namespaces/default/dummysites",
-    {},
-    (type, apiObj) => {
-      console.log(`Event: ${type} for DummySite: ${apiObj.metadata.name}`);
+  try {
+    const req = await watch.watch(
+      "/apis/stable.dwk/v1/namespaces/default/dummysites",
+      {},
+      (type, apiObj) => {
+        console.log(`Event: ${type} for DummySite: ${apiObj.metadata.name}`);
 
-      if (type === "ADDED" || type === "MODIFIED") {
-        reconcileDummySite(apiObj);
+        if (type === "ADDED" || type === "MODIFIED") {
+          reconcileDummySite(apiObj);
+        }
+      },
+      (err) => {
+        if (err) {
+          console.error("Watch error:", err);
+        }
+        // Restart watch after a delay
+        setTimeout(watchDummySites, 5000);
       }
-    },
-    (err) => {
-      console.error("Watch error:", err);
-      // Restart watch after a delay
-      setTimeout(watchDummySites, 5000);
-    }
-  );
+    );
 
-  console.log("Watching for DummySite resources...");
+    console.log("Watching for DummySite resources...", req);
+  } catch (error) {
+    console.error("Failed to start watch:", error);
+    setTimeout(watchDummySites, 5000);
+  }
 };
 
 // Start the controller

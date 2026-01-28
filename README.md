@@ -6,7 +6,7 @@ Note: Folders also have readmes that have some documentation!
 
 ## Exercises
 
-### Chapter 1
+### Chapter 2
 
 - [1.1](https://github.com/kristianka/DevOpsWithKubernetes/tree/1.1)
 - [1.2](https://github.com/kristianka/DevOpsWithKubernetes/tree/1.2)
@@ -22,7 +22,7 @@ Note: Folders also have readmes that have some documentation!
 - [1.12](https://github.com/kristianka/DevOpsWithKubernetes/tree/1.12)
 - [1.13](https://github.com/kristianka/DevOpsWithKubernetes/tree/1.13)
 
-### Chapter 2
+### Chapter 3
 
 - [2.1](https://github.com/kristianka/DevOpsWithKubernetes/tree/2.1)
 - [2.2](https://github.com/kristianka/DevOpsWithKubernetes/tree/2.2)
@@ -35,7 +35,7 @@ Note: Folders also have readmes that have some documentation!
 - [2.9](https://github.com/kristianka/DevOpsWithKubernetes/tree/2.9)
 - [2.10](https://github.com/kristianka/DevOpsWithKubernetes/tree/2.10)
 
-### Chapter 3
+### Chapter 4
 
 - [3.1](https://github.com/kristianka/DevOpsWithKubernetes/tree/3.1)
 - [3.2](https://github.com/kristianka/DevOpsWithKubernetes/tree/3.2)
@@ -50,7 +50,7 @@ Note: Folders also have readmes that have some documentation!
 - [3.11](https://github.com/kristianka/DevOpsWithKubernetes/tree/3.11)
 - [3.12](https://github.com/kristianka/DevOpsWithKubernetes/tree/3.12)
 
-### Chapter 4
+### Chapter 5
 
 - [4.1](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.1)
 - [4.2](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.2)
@@ -62,3 +62,7 @@ Note: Folders also have readmes that have some documentation!
 - [4.8](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.8)
 - [4.9](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.9)
 - [4.10](https://github.com/kristianka/DevOpsWithKubernetes/tree/4.10)
+
+### Chapter 6
+
+- [5.1](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.1)
