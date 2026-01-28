@@ -66,3 +66,4 @@ Note: Folders also have readmes that have some documentation!
 ### Chapter 6
 
 - [5.1](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.1)
+- [5.2](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.2/istio)
