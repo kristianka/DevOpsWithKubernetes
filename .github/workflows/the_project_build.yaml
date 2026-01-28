@@ -37,7 +37,7 @@ jobs:
       - name: Checkout config repository
         uses: actions/checkout@v4
         with:
-          repository: kristianka/DevOpsWithKubernetes-configs
+          repository: kristianka/DevopsWithKubernetes-configs
           token: ${{ secrets.GH_PAT }}
           path: config-repo
 
@@ -91,7 +91,7 @@ jobs:
       - name: Checkout config repository
         uses: actions/checkout@v4
         with:
-          repository: kristianka/DevOpsWithKubernetes-configs
+          repository: kristianka/DevopsWithKubernetes-configs
           token: ${{ secrets.GH_PAT }}
           path: config-repo
 

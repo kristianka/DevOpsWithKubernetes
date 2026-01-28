@@ -106,3 +106,7 @@ To summarise in a neat table:
 - Get staging ip with `kubectl get ingress -n project-staging`
 
 ![alt text](4.9.png)
+
+### Exercise 4.10
+
+- Config repo: https://github.com/kristianka/DevopsWithKubernetes-configs
