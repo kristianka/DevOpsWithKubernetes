@@ -67,3 +67,4 @@ Note: Folders also have readmes that have some documentation!
 
 - [5.1](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.1)
 - [5.2](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.2/istio)
+- [5.3](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.3/greeter)
