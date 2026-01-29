@@ -4,7 +4,7 @@ metadata:
   name: log-output-dep
   namespace: exercises
 spec:
-  replicas: 5
+  replicas: 1
   selector:
     matchLabels:
       app: log-output
@@ -42,10 +42,8 @@ spec:
         #       mountPath: /usr/src/app/shared
 
         - name: log-output
-          # imagePullPolicy: Never
-          # image: log-output
-          # image: gcr.io/dwk-gke-484423/log-output:latest
-          image: PROJECT/IMAGE
+          image: log-output:latest
+          imagePullPolicy: Never
           readinessProbe:
             initialDelaySeconds: 10 # Initial delay until the readiness is tested
             periodSeconds: 5 # How often to test
@@ -60,6 +58,8 @@ spec:
           env:
             - name: PING_PONG_URL
               value: "http://ping-pong-svc:80/pongs"
+            - name: GREETER_URL
+              value: "http://greeter-svc"
             - name: MESSAGE
               valueFrom:
                 configMapKeyRef:

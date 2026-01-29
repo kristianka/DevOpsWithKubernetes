@@ -9,14 +9,13 @@ data:
   POSTGRES_DB: pingpongdb
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: postgres-svc
   namespace: exercises
 spec:
-  clusterIP: None  # Headless service for StatefulSet
+  clusterIP: None # Headless service for StatefulSet
   selector:
     app: postgres
   ports:
@@ -26,7 +25,6 @@ spec:
       targetPort: 5432
 
 ---
-
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -81,7 +79,8 @@ spec:
         name: postgres-storage
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: standard
+        #storageClassName: standard #GKE
+        storageClassName: local-path
         resources:
           requests:
             storage: 1Gi

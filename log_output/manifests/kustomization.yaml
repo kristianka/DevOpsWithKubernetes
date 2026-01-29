@@ -1,15 +1,17 @@
+# log_output/manifests/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- deployment.yaml
-- service.yaml
-- configmap.yaml
-- persistentvolume.yaml
-- persistentvolumeclaim.yaml
-- application.yaml
-- gateway.yaml
-- httproute.yaml
+  - deployment.yaml
+  - service.yaml
+  - configmap.yaml
+  # - persistentvolume.yaml
+  # - persistentvolumeclaim.yaml
+  - istio-gateway.yaml
+  - virtualservice.yaml
+  # - gateway.yaml
+  # - httproute.yaml
 images:
-- name: PROJECT/IMAGE
-  newName: typescriptlover/log_output
-  newTag: b7300807b71667c3c92e37eb4f659582641de1ed
+  - name: PROJECT/IMAGE
+    newName: log-output
+    newTag: latest
