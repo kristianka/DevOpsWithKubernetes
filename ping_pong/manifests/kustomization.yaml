@@ -1,16 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-resources:
   # Traditional deployment (comment out when using serverless)
   # - deployment.yaml
   # - service.yaml
   # - gateway.yaml
   # - virtualservice.yaml
   # Serverless deployment (comment out when using traditional)
-  - knative-service.yaml
   # Always needed
-  - postgres-statefulset.yaml
+resources:
+- knative-service.yaml
+- postgres-statefulset.yaml
 images:
-  - name: PROJECT/IMAGE
-    newName: typescriptlover/ping_pong
-    newTag: cad8d36074b29e42d60bcbbe9682608369d6b27b
+- name: PROJECT/IMAGE
+  newName: typescriptlover/ping_pong
+  newTag: df89f3fa0309c9fa9e91981d8e41f1d4a92e3ab8
