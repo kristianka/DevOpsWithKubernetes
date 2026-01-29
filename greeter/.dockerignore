@@ -1,0 +1,11 @@
+node_modules
+.env
+.env.*
+*.key
+*.pem
+credentials
+secrets
+.git
+.github
+README.md
+readme.md

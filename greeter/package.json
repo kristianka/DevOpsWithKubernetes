@@ -1,0 +1,17 @@
+{
+  "name": "greeter",
+  "version": "1.0.0",
+  "description": "Greeter service for DevOps with Kubernetes",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun run src/index.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+    "peerDependencies": {
+    "typescript": "^5"
+  }
+
+}
