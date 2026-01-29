@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wikipedia-server
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wikipedia-server
+  template:
+    metadata:
+      labels:
+        app: wikipedia-server
+    spec:
+      volumes:
+        - name: shared-html
+          emptyDir: {}
+
+      initContainers:
+        - name: wikipedia-fetcher
+          image: curlimages/curl:latest
+          command:
+            - sh
+            - -c
+            - |
+              echo "Fetching initial Kubernetes Wikipedia page..."
+              curl -L https://en.wikipedia.org/wiki/Kubernetes -o /usr/share/nginx/html/index.html
+              echo "Initial page fetched successfully"
+          volumeMounts:
+            - name: shared-html
+              mountPath: /usr/share/nginx/html
+
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: shared-html
+              mountPath: /usr/share/nginx/html
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
+
+        - name: wikipedia-updater
+          image: curlimages/curl:latest
+          command:
+            - sh
+            - -c
+            - |
+              while true; do
+                WAIT_TIME=$((300 + RANDOM % 600))
+                echo "Waiting for $WAIT_TIME seconds before fetching a random Wikipedia page..."
+                sleep $WAIT_TIME
+                
+                echo "Fetching random Wikipedia page..."
+                curl -L https://en.wikipedia.org/wiki/Special:Random -o /usr/share/nginx/html/index.html
+                
+                if [ $? -eq 0 ]; then
+                  echo "Successfully updated Wikipedia page at $(date)"
+                else
+                  echo "Failed to fetch Wikipedia page at $(date)"
+                fi
+              done
+          volumeMounts:
+            - name: shared-html
+              mountPath: /usr/share/nginx/html
+          resources:
+            limits:
+              memory: "64Mi"
+              cpu: "50m"
