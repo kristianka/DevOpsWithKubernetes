@@ -12,7 +12,7 @@ Remember to turn off GCLOUD when not using!
 
 ### All-in-one command to restart
 
-- `docker build --pull -t ping-pong . && k3d image import ping-pong && kubectl rollout restart deployment ping-pong-dep -n exercises`
+- `docker build --pull -t ping-pong . && docker tag ping-pong:latest k3d-registry.localhost:5000/ping-pong:latest && docker push k3d-registry.localhost:5000/ping-pong:latest && kubectl apply -k manifests/` (updated 5.7 - Knative with local registry)
 
 ### Troubleshooting
 
@@ -52,3 +52,18 @@ Remember to turn off GCLOUD when not using!
 
 - `kubectl create namespace argo-rollouts`
 - `kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml`
+
+### Exercise 5.7
+
+- We need to create registy and push the image to it:
+
+```bash
+k3d registry create registry.localhost --port 5000
+docker network connect k3d-k3s-default k3d-registry.localhost
+docker tag ping-pong:latest k3d-registry.localhost:5000/ping-pong:latest
+docker push k3d-registry.localhost:5000/ping-pong:latest
+```
+
+- Get SVC `kubectl get ksvc -n exercises`
+- Access via port-forward: `kubectl port-forward -n kourier-system svc/kourier 8081:80`
+- Then: `curl -H "Host: ping-pong.exercises.172.20.0.3.sslip.io" http://localhost:8081/pongs`
