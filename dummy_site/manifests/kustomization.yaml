@@ -7,4 +7,4 @@ resources:
 images:
 - name: PROJECT/IMAGE
   newName: typescriptlover/dummysite_controller
-  newTag: cad8d36074b29e42d60bcbbe9682608369d6b27b
+  newTag: df89f3fa0309c9fa9e91981d8e41f1d4a92e3ab8
