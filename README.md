@@ -69,3 +69,5 @@ Note: Folders also have readmes that have some documentation!
 - [5.2](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.2/istio)
 - [5.3](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.3/greeter)
 - [5.4](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.4/wikipedia-sidecar)
+- 5.5: nothing to submit
+- [5.6](https://github.com/kristianka/DevOpsWithKubernetes/tree/5.6/serverless)
